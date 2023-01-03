@@ -4,12 +4,12 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         while (true) {
-            println("Task (hide, show, exit):")
+            print("Task (hide, show, exit): ")
             when (val cmd = readln()) {
                 "hide" -> {
-                    print("Input image 🖼 (absolute path): ")
+                    print("Input image 🖼 (relative path): ")
                     val inputImageName = readln()
-                    print("Output image 🖼 (absolute path): ")
+                    print("Output image 🖼 (relative path): ")
                     val outputImageName = readln()
                     print("Secret ㊙: ")
                     val message = readln()

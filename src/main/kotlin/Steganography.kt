@@ -1,17 +1,22 @@
+import com.github.ajalt.mordant.rendering.TextColors.red
 import java.awt.Color
 import java.io.File
+import java.nio.file.Paths
 import javax.imageio.ImageIO
+import kotlin.io.path.absolutePathString
 
+val path = Paths.get("").absolutePathString()
 fun inject(inputImageName: String, message: String, password: String, outputImageName: String): Boolean {
-    val inputImageFile = File(inputImageName)
-    if (!File(inputImageName).exists()) {
-        println("Can't read input file!")
+    val inputImageFile = File(path + File.separator + inputImageName)
+    if (!File(path + File.separator + inputImageName).exists()) {
+        println(red("Can't read input file!"))
+        println(inputImageFile.absolutePath)
         return false
     }
     val encryptedBytes = encrypt(message, password)
     val inputImage = ImageIO.read(inputImageFile)
     if (inputImage.width * inputImage.height < encryptedBytes.size * 8) {
-        println("The input image is not large enough to hold this message.")
+        println(red("The input image is not large enough to hold this message."))
         return false
     }
     var bitsAdded = ""
@@ -37,22 +42,23 @@ fun inject(inputImageName: String, message: String, password: String, outputImag
             }
         }
     }
-    val outputImageFile = File(outputImageName)
+    val outputImageFile = File(path + File.separator + outputImageName)
     ImageIO.write(inputImage, "png", outputImageFile)
-    println("Message saved in $outputImageName image.")
+    println("Message saved in ${path + File.separator + outputImageName} image.")
 
     return true
 }
 
 fun extract(inputImageName: String, password: String): Boolean {
 
-    if (!File(inputImageName).exists()) {
-        println("Can't read input file!")
+    if (!File(path + File.separator + inputImageName).exists()) {
+        println(red("Can't read input file!"))
+        println(red(path + File.separator + inputImageName))
         return false
     }
     val messageAsBytes = mutableListOf<Byte>()
     val bits = mutableListOf<Int>()
-    val inputImageFile = File(inputImageName)
+    val inputImageFile = File(path + File.separator + inputImageName)
     val inputImage = ImageIO.read(inputImageFile)
     extractMessage@ for (y in 0 until inputImage.height) {
         for (x in 0 until inputImage.width) {
